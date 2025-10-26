@@ -9,35 +9,33 @@ return{
     {
         "williamboman/mason-lspconfig.nvim",
         config = function()
-            require("mason-lspconfig").setup{
+            require("mason-lspconfig").setup({
+                automatic_enable = {
+                    "lua_ls",
+                    "vimls"
+                },
                 ensure_installed = {
-                    "clangd", -- for c++/c 
-                    "lua_ls", -- for lua 
---                    "cmake",
                     "gopls", -- for golang
                     "pyright", -- for python
-                    "ts_ls", --type-script: for nodejs
-                    "html"
+                    --    "ts_ls", --type-script: for nodejs
                 }
-            }
+                })
             local lspconfig = require("lspconfig")
-              lspconfig.clangd.setup({})
-              lspconfig.lua_ls.setup({})
- --             lspconfig.cmake.setup({})
-             lspconfig.ts_ls.setup({})
-             lspconfig.html.setup({})
+              lspconfig.clangd.setup({
+              });
+              lspconfig.pyright.setup({})
+              lspconfig.cmake.setup({})
+          --    #              lspconfig.ts_ls.setup({})
               lspconfig.gopls.setup({})
-             lspconfig.pyright.setup({})
-            require("lspconfig").lua_ls.setup({
-                settings = {
-                    Lua = {
-                        diagnostics = {
-                            globals = {"vim"}
-                        },
-                    },
-                },
-            })
+            --  #lspconfig.pyright.setup({})
         end
     },
-    
+      -- Completion
+  { "hrsh7th/nvim-cmp" },
+  { "hrsh7th/cmp-nvim-lsp" },
+  { "hrsh7th/cmp-buffer" },
+  { "hrsh7th/cmp-path" },
+  { "L3MON4D3/LuaSnip" },
+  { "saadparwaiz1/cmp_luasnip" }
+
 }

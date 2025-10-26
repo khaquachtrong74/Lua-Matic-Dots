@@ -11,7 +11,6 @@ local batteryicontext = wibox.widget{
 }
 local mybatterywidget = wibox.widget{
     layout = wibox.layout.fixed.horizontal,
---    batteryiconwidget,
     batteryicontext,
 }
 local function get_battery ()
@@ -31,11 +30,11 @@ gears.timer {
 --        batteryiconwidget.image = os.getenv("HOME") .. "/.config/awesome/images/battery.png"
         local int_percent = tonumber(percent)
         if int_percent > 85 then
-            batteryicontext.text = "  "
+            batteryicontext.text = "  |"
         elseif int_percent > 45 then
-            batteryicontext.text = "  "
+            batteryicontext.text = "  |"
         elseif int_percent > 25 then
-            batteryicontext.text = "  " 
+            batteryicontext.text = "  |" 
         else
             batteryicontext.text = " 󰂎 "
         end

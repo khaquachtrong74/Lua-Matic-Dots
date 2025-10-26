@@ -15,6 +15,9 @@ local volume_widget   = require("widgets.volume")
 local shutdown_widget = require("widgets.shutdown")
 local mykeyboardlayout = awful.widget.keyboardlayout()
 local mymainmenu = require("mainmenu")
+
+--
+
 awful.screen.connect_for_each_screen(function(s)
     awful.tag({ "Browser", "Study", "Huauaua", "Nothing", "Recorder"}, s, awful.layout.layouts[1])
     local taglist_buttons = gears.table.join(
@@ -104,6 +107,7 @@ awful.screen.connect_for_each_screen(function(s)
             widget = wibox.container.background,
         },
     }
+--
 
 local mylauncher = awful.widget.launcher(
     {
@@ -114,13 +118,23 @@ local mylauncher = awful.widget.launcher(
 local left = wibox.layout.fixed.horizontal()
 local mid = wibox.layout.fixed.horizontal()
 local right = wibox.layout.fixed.horizontal()
+local wrap_usage
+local wrap_tools
 
-left.spacing = dpi(8)
-left:add(clock_widget)
+local net_widgets = require("net_widgets")
+net_wireless = net_widgets.wireless({interface="wlp0s20f3"})
+net_wired = net_widgets.indicator({
+    interfaces  = {"enp2s0", "another_interface", "and_another_one"},
+    timeout     = 5
+})
+
+
+left:add(wibox.container.background(clock_widget, theme.bg_normal))
+left.spacing = dpi(0)
 left:add(mylauncher)
 left:add(s.mytaglist)
 mid:add(s.mytasklist)
-local wrap_usage = wibox.widget{
+wrap_usage = wibox.widget{
     {
         {
             cpu_widget,
@@ -128,32 +142,33 @@ local wrap_usage = wibox.widget{
             layout = wibox.layout.fixed.horizontal
         },
         bg = theme.wrap_bg,
-        fg = theme.wrap_fg_usage,
+        fg = theme.fg_widget_text,
         widget = wibox.container.background,
     },
     widget = wibox.container.margin,
 }
 
-local wrap_tools = wibox.widget{
+wrap_tools = wibox.widget{
     {
-        wibox.container.margin(battery_widget,0,10,0,0),
+        wibox.container.margin(battery_widget,0,5,0,0),
+        wibox.container.margin(net_wireless, 0,5,0,0),
         volume_widget,
         shutdown_widget,
         layout = wibox.layout.fixed.horizontal
     },
     bg = theme.bg_normal,
-    fg = theme.fg_normal,
+    fg = theme.fg_widget_text,
     widget = wibox.widget.background,
 }
 right.spacing = dpi(8)
 right:add(wrap_usage)
 right:add(wrap_tools)
-s.mywibox = awful.wibar({ position = "top", screen = s, height = 28, visible=false, ontop=true})
+s.mywibox = awful.wibar({ position = "top", screen = s, height = 24, visible=false, ontop=true})
 s.mywibox:setup {
     layout = wibox.layout.align.horizontal,
     {
         left,
-        fg = theme.fg_normal,
+        fg = theme.fg_widget_text,
         bg = theme.bg_normal,
         widget = wibox.widget.background
     },
@@ -165,50 +180,11 @@ s.mywibox:setup {
     },
     {
         right,
-        fg = "#ffffff",
+        fg = theme.fg_widget_text,
         bg = theme.bg_normal,
         widget = wibox.widget.background
     }, 
     shape = gears.shape.rectangle
 }
-    s.wibox_trigger = wibox({
-        screen = s,
-        x      = s.geometry.x,
-        y      = s.geometry.y,
-        width  = s.geometry.width,
-        height = 2,              
-        bg     = "#00000000",    
-        ontop  = true,
-        visible = true
-    })
-    s.wibox_trigger:struts({ top = 0 })
-    s.wibox_trigger:connect_signal("mouse::enter", function()
-        s.mywibox.visible = true
-        s.wibox_trigger.visible = false
-    end)
+end)
 
-    s.mywibox:connect_signal("mouse::leave", function()
-        s.mywibox.visible = false
-        s.wibox_trigger.visible = true
-    end)
-end)
-  
-local function update_wibox_visibility(s)
-    local t = s.selected_tag
-    if not t or #t:clients() == 0 then
-        s.mywibox.visible     = true
-        s.wibox_trigger.visible = false
-    else
-        s.mywibox.visible     = false
-        s.wibox_trigger.visible = true
-    end
-end
-
-awful.tag.attached_connect_signal(nil, "property::selected", function(t)
-    update_wibox_visibility(t.screen)
-end)
-client.connect_signal("manage",   function(c) update_wibox_visibility(c.screen) end)
-client.connect_signal("unmanage", function(c) update_wibox_visibility(c.screen) end)
-awful.screen.connect_for_each_screen(function(s)
-    update_wibox_visibility(s)
-end)

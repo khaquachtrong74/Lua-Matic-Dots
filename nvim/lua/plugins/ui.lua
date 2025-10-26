@@ -1,85 +1,42 @@
-return{
+return {
+  { "pauchiner/pastelnight.nvim" },
+  { "vague2k/vague.nvim" },
+  { "ilof2/posterpole.nvim" },
+  { "nyoom-engineering/oxocarbon.nvim"},
     {
-        "shaunsingh/nord.nvim"
-    },
-    {
-    "shaunsingh/moonlight.nvim"
-    },
-    {
-    "q/K-DE-Cyberpunk-Neon"
-    },
-    {
-    "rebelot/kanagawa.nvim",
-    priority = 1000,
-    config = function()
-        require('kanagawa').setup({
-        compile = false,
-        undercurl = true,
-        commentStyle = { italic = true },
-        functionStyle = { bold = true },
-        keywordStyle = { italic = true },
-        statementStyle = { bold = true },
-        typeStyle = { bold = true },
-        transparent = false, -- bạn muốn xuyên nền thì bật true
-        terminalColors = true,
-      })
-    end
-    },
-    {
-      "projekt0n/github-nvim-theme",
+      "sainnhe/gruvbox-material",
       priority = 1000,
       config = function()
-        require('github-theme').setup({
-        })
-      end
+        vim.g.gruvbox_material_background = "hard"  -- "medium" hoặc "soft"
+        vim.g.gruvbox_material_palette = "original"
+        vim.cmd("colorscheme gruvbox-material")
+      end,
     },
-    { 'nvim-lualine/lualine.nvim',
-        config = function()
-            require('lualine').setup {
-              options = {
-                icons_enabled = true,
-                theme = 'auto',
-                component_separators = { left = '', right = ''},
-                section_separators = { left = '', right = ''},
-                disabled_filetypes = {
-                  statusline = {},
-                  winbar = {},
-                },
-                ignore_focus = {},
-                always_divide_middle = true,
-                always_show_tabline = true,
-                globalstatus = false,
-                refresh = {
-                  statusline = 100,
-                  tabline = 100,
-                  winbar = 100,
-                }
-              },
-              sections = {
-                lualine_a = {'mode'},
-                lualine_b = {'branch', 'diff', 'diagnostics'},
-                lualine_c = {'filename'},
-                lualine_x = {'encoding', 'fileformat', 'filetype'},
-                lualine_y = {'progress'},
-                lualine_z = {'location'}
-              },
-              inactive_sections = {
-                lualine_a = {},
-                lualine_b = {},
-                lualine_c = {'filename'},
-                lualine_x = {'location'},
-                lualine_y = {},
-                lualine_z = {}
-              },
-              tabline = {},
-              winbar = {},
-              inactive_winbar = {},
-              extensions = {}
-            }
+  {
+	"rose-pine/neovim",
+	  name = "rose-pine",
+	  priority = 1000,
+	  config = function()
+	    require("rose-pine").setup({
+	      variant = "main",
+	      dark_variant = "main",
+	    })
+	    vim.cmd("colorscheme rose-pine")
 
-        end
-    },
-    { 'folke/tokyonight.nvim',
-    },
+	    local hl = vim.api.nvim_set_hl
+	    hl(0, "Normal", { bg = "#0b090a", fg = "#ffe5e0" })
+	    hl(0, "Keyword", { fg = "#ff4444", bold = true })
+	    hl(0, "Type", { fg = "#ff6644" })
+	    hl(0, "Function", { fg = "#ff3333" })
+	    hl(0, "String", { fg = "#ff9966" })
+	    hl(0, "Identifier", { fg = "#ff4444" })
+	  end,
+  },
 
+  -- 🌊 Các theme khác giữ lazy=true, không gọi colorscheme
+  { "rebelot/kanagawa.nvim", lazy = true, config = function() require("kanagawa").setup({}) end },
+  { "projekt0n/github-nvim-theme", lazy = true, config = function() require("github-theme").setup({}) end },
+  { "shaunsingh/nord.nvim", lazy = true },
+  { "shaunsingh/moonlight.nvim", lazy = true },
+  { "q/K-DE-Cyberpunk-Neon", lazy = true },
 }

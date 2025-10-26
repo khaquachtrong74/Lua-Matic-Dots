@@ -33,8 +33,9 @@
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
    networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-   networking.firewall.enable = true;
+   networking.firewall.enable = false;
    networking.firewall.allowPing = false;
+    networking.nameservers = [ "8.8.8.8" "1.1.1.1" ];
 
   # Set your time zone.
   time.timeZone = "Asia/Ho_Chi_Minh";
@@ -54,11 +55,6 @@
 
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
-location.provider = "geoclue2";
-location = {
-	latitude = "10.7769";
-	longitude = "106.7009";
-};
 
 services={
         hardware.openrgb.enable=true;
@@ -93,19 +89,22 @@ services={
             enable = true;
             pulse.enable = true;
         };
-        redshift = {
-            enable = false;
-            brightness = {
-              day = "1";
-              night = "1";
-            };
-            temperature = {
-                day = 5500;
-                night = 3700;
-            };
-        };
-};
+    };
+virtualisation.docker = {
+    enable = true;
+    rootless = {
+        enable = true;
+        setSocketVariable = true;
+    };
+    daemon.settings = {
+      dns = [ "8.8.8.8" "1.1.1.1" ];
+    };
 
+    package = pkgs.docker;
+    extraPackages = with pkgs; [
+        docker-compose
+    ];
+};
 hardware = {
     graphics = {
         enable = true;
@@ -180,10 +179,10 @@ security.polkit.enable=true;
   # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users.khat = {
      isNormalUser = true;
-     extraGroups = [ "wheel" "dialout"]; # Enable ‘sudo’ for the user.
+     extraGroups = [ "wheel" "dialout" "docker"]; # Enable ‘sudo’ for the user.
      packages = with pkgs; [
+       iw
        tree
-       unzip
        upower
        prometheus-nvidia-gpu-exporter
        brightnessctl
@@ -191,30 +190,17 @@ security.polkit.enable=true;
        bluez-tools
        picom
        fastfetch
-       gcc
        gnumake
        binutils
        coreutils
        obs-studio
        brave
-
-       flameshot
        scrot
-       xclip
-       xsel
        clipmenu
-       ffmpeg
        btop
-
        kdePackages.kdenlive
        vesktop
        realvnc-vnc-viewer
-
-       # rice
-       #cava  
-       #pipes 
-       #tty-clock 
-       #
        wpsoffice
        anydesk
        mpv
@@ -224,6 +210,8 @@ security.polkit.enable=true;
        bash
        ranger
        feh
+       unzip
+       zip
 
        #arduino-cli
        bashInteractive
@@ -231,6 +219,11 @@ security.polkit.enable=true;
        kdePackages.dolphin
        heroic
        texstudio
+
+       # For hacking
+       nmap
+       aircrack-ng
+       nikto
      ];
    };
 
@@ -265,7 +258,12 @@ security.polkit.enable=true;
    libglvnd
    libGL 
    go
-];
+   gcc
+   python3
+   nodejs_24
+   jdk17
+   linux-firmware
+  ];
 
 
 i18n.inputMethod = {

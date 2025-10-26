@@ -5,7 +5,7 @@ local modkey = "Mod4" require("awful.autofocus")
 local beautiful = require("beautiful")
 require("core.erros")
 beautiful.font = "JetBrainsMono Nerd Font 9"
-beautiful.useless_gap = 2
+beautiful.useless_gap=8
 awful.spawn.with_shell("picom --config ~/.config/picom/picom.conf")
 awful.spawn.with_shell("clipmenud")
 awful.layout.layouts = require("layout")

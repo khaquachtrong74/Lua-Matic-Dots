@@ -1,16 +1,15 @@
 ```bash
     .
     ├── init.lua
+    ├── lazy
+    │   └── lazy.nvim
     ├── lazy-lock.json
     ├── lua
     │   ├── base.lua
-    │   ├── config
-    │   │   └── lazy.lua
     │   ├── keymaps.lua
     │   └── plugins
     │       ├── cmp.lua
     │       ├── filetree.lua
-    │       ├── import-cost.lua
     │       ├── lspconfig.lua
     │       ├── markdown-preview.lua
     │       ├── mason.lua
@@ -19,6 +18,5 @@
     │       └── ui.lua
     └── readme.md
 ```
-
-4 directories, 16 files
+    5 directories, 13 files
 

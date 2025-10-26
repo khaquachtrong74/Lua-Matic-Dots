@@ -20,8 +20,8 @@ vim.keymap.set("n", "<leader>f", function()
         cmd = vim.fn.expand("%:p:h"),
     })
 end, {desc = "Find file in current folder"})
-vim.keymap.set("n", "<C-r>", ':!alacritty -e ranger &<CR>',
-{desc = "Manager folder",noremap = true, silent = true})
+--vim.keymap.set("n", "<C-r>", ':!alacritty -e ranger &<CR>',
+--{desc = "Manager folder",noremap = true, silent = true})
 -- HYBRID -- 
 vim.keymap.set({"n","i"}, "<C-f>","<cmd>Telescope current_buffer_fuzzy_find<CR>",{desc = "Fuzzy search in current file"})
 -- CMD live-server --

@@ -157,10 +157,9 @@ clientkeys = gears.table.join(
               {description = "move to screen", group = "client"}),
     awful.key({ modkey,           }, "t",
     function ()
-        local s = awful.screen.focused()
-        if s.mywibox then
+        local s = screen[1]  -- chọn screen mặc định
+        if s and s.mywibox then
             s.mywibox.visible = not s.mywibox.visible
-            --tasklist.visible = not tasklist.visible
         end
     end,
     {description = "toggle mywibox", group = "awesome"}),

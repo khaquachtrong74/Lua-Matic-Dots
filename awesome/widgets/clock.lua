@@ -10,7 +10,7 @@ local myicontextclock = wibox.widget{
         text = " 󱨰 ",
         widget = wibox.widget.textbox,
     },
-    fg = theme.fg_normal,
+    fg = theme.fg_widget_text,
     widget = wibox.widget.background
 }
 local mytextclock = wibox.widget{
@@ -20,7 +20,7 @@ local mytextclock = wibox.widget{
             widget = wibox.widget.textbox,
             id = "clock_text"
         },
-        fg = theme.fg_normal,
+        fg = theme.fg_widget_text,
         widget = wibox.widget.background
     },
     widget = wibox.container.margin,
@@ -33,12 +33,13 @@ local myclock = wibox.widget{
     myicontextclock,
     mytextclock,
 }
+
 gears.timer {
     timeout = 1,
     autostart = true,
     call_now = true,
     callback = function()
-        mytextclock:set_time(os.date("%H:%M:%S"))
+        mytextclock:set_time(os.date("%H:%M:%S "))
     end
 }
 
@@ -62,15 +63,15 @@ styles.month   = { padding      = 5,
 }
 styles.normal  = { shape    = rounded_shape(5) }
 styles.focus   = { fg_color = theme.fg_focus,
-                   bg_color = '#5a1917',
+                   bg_color = theme.bg_focus,
                    markup   = function(t) return '<b>' .. t .. '</b>' end,
                    shape    = rounded_shape(5, true)
 }
-styles.header  = { fg_color = theme.fg_focus,
+styles.header  = { fg_color = theme.fg_normal,
                    markup   = function(t) return '<b>' .. t .. '</b>' end,
                    shape    = rounded_shape(10)
 }
-styles.weekday = { fg_color = '#7788af',
+styles.weekday = { fg_color = '#AAAAAA',
                    markup   = function(t) return '<b>' .. t .. '</b>' end,
                    shape    = rounded_shape(5)
 }
@@ -85,7 +86,7 @@ local function decorate_cell(widget, flag, date)
     -- Change bg color for weekends
     local d = {year=date.year, month=(date.month or 1), day=(date.day or 1)}
     local weekday = tonumber(os.date('%w', os.time(d)))
-    local default_bg = (weekday==0 or weekday==6) and '#232323' or '#383838'
+    local default_bg = (weekday==0 or weekday==6) and theme.fg_focus or theme.fg_normal
     local ret = wibox.widget {
         {
             widget,
@@ -93,10 +94,10 @@ local function decorate_cell(widget, flag, date)
             widget  = wibox.container.margin
         },
         shape              = props.shape,
-        shape_border_color = props.border_color or '#b9214f',
+        shape_border_color = props.border_color,
         shape_border_width = props.border_width or 0,
         fg                 = props.fg_color or theme.fg_normal,
-        bg                 = props.bg_color or '#214180',
+        bg                 = props.bg_color or '#444555',
         widget             = wibox.container.background
     }
     return ret
@@ -139,6 +140,6 @@ myicontextclock:buttons(
 
 function mytextclock:get_time()
     local tb = self:get_children_by_id("clock_text")[1]
-    return tb and tb:get_text() or ""
+    return tb and tb:get_text() .." " or " "
 end
 return myclock
